@@ -139,7 +139,7 @@ menu = ["Home", "Products", "About Us", "Contact"]
 choice = st.sidebar.radio("Navigate", menu)
 
 # WhatsApp Number
-WHATSAPP_NUMBER = "2348012345678"   # replace with real business number
+WHATSAPP_NUMBER = "2347039273135"   # replace with real business number
 
 # =========================
 # Product Catalog
@@ -230,7 +230,7 @@ elif choice == "Contact":
     st.write("**Phone:** +234 703 927 3135")
     st.write(f"**WhatsApp:** [Chat with us](https://wa.me/2347039273135)")
     st.write("**Email:** aliyuauwal@gmail.com")
-    st.map({"lat": 9.2795, "lon": 12.4582})  # Example location (Kaduna)
+    st.map("lat": 9.2795, "lon": 12.4582)  # Example location (Kano, Nigeria)
 
 # =========================
 # Floating WhatsApp Button
