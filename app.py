@@ -207,7 +207,7 @@ elif choice == "Products":
                 <div class="product-card">
                     <img src="{product['img']}" width="100%" />
                     <h4>{product['name']}</h4>
-                    <a href="https://wa.me/{WHATSAPP_NUMBER}?text=Hello%20Faco%20Limited%2C%20I%20want%20to%20order%20{product['name']}" target="_blank">📩 Order on WhatsApp</a>
+                    <a href="https://wa.me/2347039273135?text=Hello%20Faco%20Limited%2C%20I%20want%20to%20order%20{product['name']}" target="_blank">📩 Order on WhatsApp</a>
                 </div>
             """, unsafe_allow_html=True)
 
