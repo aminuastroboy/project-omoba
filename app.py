@@ -228,9 +228,9 @@ elif choice == "About Us":
 elif choice == "Contact":
     st.header("📞 Contact Us")
     st.write("**Phone:** +234 703 927 3135")
-    st.write(f"**WhatsApp:** [Chat with us](https://wa.me/2347039273135)")
+    st.write("**WhatsApp:** [Chat with us](https://wa.me/2347039273135)")
     st.write("**Email:** aliyuauwal@gmail.com")
-    st.map("lat": 9.2795, "lon": 12.4582)  # Example location (Kano, Nigeria)
+    st.map(""lat": 9.2795, "lon": 12.4582")  # Example location (Kano, Nigeria)
 
 # =========================
 # Floating WhatsApp Button
