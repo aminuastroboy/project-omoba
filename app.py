@@ -1,183 +1,131 @@
 import streamlit as st
-import pandas as pd
-import urllib.parse
+import folium
+from streamlit_folium import st_folium
 
-# ======================================
-# Config
-# ======================================
-st.set_page_config(page_title="Faco Limited", page_icon="🖊️", layout="wide")
+# -----------------------
+# CONFIG
+# -----------------------
+st.set_page_config(page_title="Faco Limited", page_icon="🖋️", layout="wide")
 
-WHATSAPP_NUMBER = "2347039273135"
+CONTACT = {
+    "business": "Faco Limited",
+    "phones": [
+        {"label": "Main Line / WhatsApp", "display": "+234 703 927 3135", "e164": "2347039273135"},
+        {"label": "Alt Line",             "display": "+234 808 212 2221", "e164": "2348082122221"},
+    ],
+    "whatsapp_e164": "2347039273135",
+    "email": "aliyuauwal@gmail.com",
+    "address": "Kano, Nigeria",
+    "lat": 12.0000,
+    "lon": 8.5000,
+    "hours": {"Mon–Fri": "8:30–18:00", "Sat": "9:00–16:00", "Sun": "Closed"},
+    "wa_catalog_url": "",  # Add catalog link if available
+}
 
-# ======================================
-# Custom CSS (Material Design Inspired)
-# ======================================
+# -----------------------
+# STYLING
+# -----------------------
 st.markdown("""
-<style>
+    <style>
     body {font-family: 'Roboto', sans-serif;}
-
-    /* Navigation Bar */
-    .navbar {
-        background: linear-gradient(90deg, #1976d2, #42a5f5);
-        padding: 12px 20px;
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-radius: 8px;
-        margin-bottom: 20px;
-    }
-    .navbar a {
-        text-decoration: none;
-        color: white;
-        margin: 0 10px;
-    }
-    .navbar a:hover {
-        text-decoration: underline;
-    }
-
-    /* Hero */
-    .hero {
-        background: linear-gradient(135deg, #42a5f5, #1976d2);
-        padding: 60px 20px;
+    h1, h2, h3 {font-weight: 600; color: #3D79A4;}
+    .material-card {
+        background: white;
         border-radius: 16px;
-        color: white;
-        text-align: center;
-        margin-bottom: 30px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-    .hero h1 {font-size: 2.5rem; font-weight: bold;}
-    .hero p {font-size: 1.2rem;}
-
-    /* Product Card */
-    .product-card {
-        background: #fff;
-        border-radius: 16px;
-        padding: 15px;
-        margin-bottom: 20px;
-        box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-        transition: transform 0.2s ease;
-    }
-    .product-card:hover {transform: translateY(-5px);}
-    .product-card img {border-radius: 12px; margin-bottom: 10px;}
-    .product-card h4 {margin: 5px 0; color: #1976d2;}
-
-    /* Floating WhatsApp Button */
     .whatsapp-float {
         position: fixed;
-        width: 60px;
-        height: 60px;
-        bottom: 20px;
-        right: 20px;
-        background-color: #25d366;
-        color: #FFF;
-        border-radius: 50px;
+        width: 60px; height: 60px;
+        bottom: 20px; right: 20px;
+        background: #25D366;
+        color: white; border-radius: 50%;
         text-align: center;
-        font-size: 30px;
-        box-shadow: 2px 2px 3px #999;
-        z-index: 100;
+        font-size: 32px; line-height: 60px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.25);
+        z-index: 999;
+        transition: transform .2s;
     }
-    .whatsapp-float i {
-        margin-top: 16px;
-    }
-</style>
+    .whatsapp-float:hover {transform: scale(1.08);}
+    </style>
 """, unsafe_allow_html=True)
 
-# ======================================
-# Navbar
-# ======================================
-st.markdown("""
-<div class="navbar">
-    <div>🖊️ Faco Limited</div>
-    <div>
-        <a href="#home">Home</a>
-        <a href="#products">Products</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# -----------------------
+# HEADER
+# -----------------------
+col1, col2 = st.columns([1, 3])
+with col1:
+    st.image("logo.png", width=120)  # place your Faco Limited logo file in same folder
+with col2:
+    st.markdown("<h1>Faco Limited</h1><h3>Office Stationery & Student Supplies</h3>", unsafe_allow_html=True)
 
-# ======================================
-# Hero Section
-# ======================================
-st.markdown("""
-<div id="home" class="hero">
-    <h1>Welcome to Faco Limited</h1>
-    <p>Your one-stop shop for Office & School Supplies</p>
-    <a href="#products"><button style="padding:12px 24px; border:none; border-radius:8px; background:#fff; color:#1976d2; font-weight:bold; cursor:pointer;">Shop Now</button></a>
-</div>
-""", unsafe_allow_html=True)
+st.markdown("---")
 
-# ======================================
-# Product Catalog
-# ======================================
-products = [
-    {"name": "Notebooks", "category": "School", "img": "https://images.unsplash.com/photo-1589998059171-988d887df646"},
-    {"name": "Pens & Markers", "category": "School", "img": "https://images.unsplash.com/photo-1589190051288-0f9c1f24f7d4"},
-    {"name": "Office Supplies", "category": "Office", "img": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4"},
-    {"name": "Calculators", "category": "School", "img": "https://images.unsplash.com/photo-1581090700227-4c4d9b3c46a1"},
-    {"name": "Files & Folders", "category": "Office", "img": "https://images.unsplash.com/photo-1616627781961-c7eec2a3f8c4"},
-]
-
-st.markdown('<div id="products"></div>', unsafe_allow_html=True)
-st.subheader("🛒 Our Products")
-
-search = st.text_input("🔍 Search Products")
-category = st.selectbox("📂 Filter by Category", ["All", "School", "Office"])
-
-filtered = [
-    p for p in products
-    if search.lower() in p["name"].lower() and (category == "All" or p["category"] == category)
-]
-
+# -----------------------
+# PRODUCT SHOWCASE
+# -----------------------
+st.subheader("Our Products")
 cols = st.columns(3)
-for i, product in enumerate(filtered):
+
+products = [
+    {"name": "Exercise Books", "desc": "Durable books for students", "price": "₦500"},
+    {"name": "Pens & Pencils", "desc": "Quality writing instruments", "price": "₦100"},
+    {"name": "Office Files", "desc": "Organize your work", "price": "₦300"},
+    {"name": "A4 Paper", "desc": "500 sheets per pack", "price": "₦2,500"},
+    {"name": "Markers", "desc": "Whiteboard & permanent markers", "price": "₦250"},
+    {"name": "Calculators", "desc": "Scientific & basic calculators", "price": "₦2,000"},
+]
+
+for i, p in enumerate(products):
     with cols[i % 3]:
         st.markdown(f"""
-        <div class="product-card">
-            <img src="{product['img']}" width="100%">
-            <h4>{product['name']}</h4>
-        </div>
+            <div class="material-card">
+                <h4>{p['name']}</h4>
+                <p>{p['desc']}</p>
+                <strong>{p['price']}</strong>
+            </div>
         """, unsafe_allow_html=True)
-        with st.form(key=f"order_{i}"):
-            name = st.text_input("Your Name", key=f"name_{i}")
-            submit = st.form_submit_button("📩 Order on WhatsApp")
-            if submit and name.strip():
-                msg = f"Hello Faco Limited, my name is {name}. I want to order {product['name']}."
-                encoded = urllib.parse.quote(msg)
-                url = f"https://wa.me/{WHATSAPP_NUMBER}?text={encoded}"
-                st.markdown(f"[👉 Click here to send WhatsApp message]({url})", unsafe_allow_html=True)
 
-# ======================================
-# About Section
-# ======================================
-st.markdown('<div id="about"></div>', unsafe_allow_html=True)
-st.subheader("ℹ️ About Us")
-st.write("""
-Faco Limited is passionate about providing students and professionals with the best stationery products. 
-From notebooks and pens to office essentials, we’ve got it all — at affordable prices with fast delivery.
-""")
-
-# ======================================
-# Contact Section
-# ======================================
-st.markdown('<div id="contact"></div>', unsafe_allow_html=True)
+# -----------------------
+# CONTACT INFO
+# -----------------------
 st.subheader("📞 Contact Us")
-st.write("**Phone:** +234 703 927 3135")
-st.write(f"**WhatsApp:** [Chat with us](https://wa.me/{WHATSAPP_NUMBER})")
-st.write("**Email:** aliyuauwal@gmail.com")
 
-location = pd.DataFrame({'lat': [9.2795], 'lon': [12.4582]})
-st.map(location, zoom=12)
+c1, c2 = st.columns(2)
 
-# ======================================
-# Floating WhatsApp Button
-# ======================================
+with c1:
+    st.markdown('<div class="material-card">', unsafe_allow_html=True)
+    st.markdown(f"**📍 Address:** {CONTACT['address']}")
+    for ph in CONTACT["phones"]:
+        st.markdown(f"**📞 {ph['label']}:** [{ph['display']}](tel:{ph['e164']})")
+    st.markdown(f"**📧 Email:** [{CONTACT['email']}](mailto:{CONTACT['email']})")
+    hours_str = "<br>".join([f"**{k}:** {v}" for k, v in CONTACT["hours"].items()])
+    st.markdown(f"**🕒 Business Hours:** <br>{hours_str}", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with c2:
+    st.markdown('<div class="material-card">', unsafe_allow_html=True)
+    st.markdown("**🌍 Find Us on Map:**")
+    m = folium.Map(location=[CONTACT["lat"], CONTACT["lon"]], zoom_start=13)
+    folium.Marker(
+        [CONTACT["lat"], CONTACT["lon"]],
+        tooltip=CONTACT["business"],
+        popup=CONTACT["address"],
+        icon=folium.Icon(color="blue", icon="info-sign"),
+    ).add_to(m)
+    st_folium(m, width=350, height=250)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# -----------------------
+# WHATSAPP FLOAT BUTTON
+# -----------------------
+prefilled_msg = f"Hello {CONTACT['business']}, I’d like to place an order."
+wa_link = CONTACT["wa_catalog_url"] or f"https://wa.me/{CONTACT['whatsapp_e164']}?text={prefilled_msg.replace(' ', '%20')}"
+
 st.markdown(f"""
-<a href="https://wa.me/{WHATSAPP_NUMBER}" class="whatsapp-float" target="_blank">
-    <i class="fa fa-whatsapp"></i>
-</a>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <a href="{wa_link}" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
+        💬
+    </a>
 """, unsafe_allow_html=True)
