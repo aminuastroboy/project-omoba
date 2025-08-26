@@ -3,7 +3,7 @@ import folium
 from streamlit_folium import st_folium
 
 # -----------------------
-# CONFIG
+# PAGE CONFIG
 # -----------------------
 st.set_page_config(page_title="Faco Limited", page_icon="🖋️", layout="wide")
 
@@ -19,7 +19,7 @@ CONTACT = {
     "lat": 12.0000,
     "lon": 8.5000,
     "hours": {"Mon–Fri": "8:30–18:00", "Sat": "9:00–16:00", "Sun": "Closed"},
-    "wa_catalog_url": "",  # Add catalog link if available
+    "wa_catalog_url": "",  # Add WhatsApp catalog link if available
 }
 
 # -----------------------
@@ -27,14 +27,14 @@ CONTACT = {
 # -----------------------
 st.markdown("""
     <style>
-    body {font-family: 'Roboto', sans-serif;}
-    h1, h2, h3 {font-weight: 600; color: #3D79A4;}
+    body {font-family: 'Roboto', sans-serif !important;}
+    h1, h2, h3 {font-weight: 600 !important; color: #3D79A4 !important;}
     .material-card {
-        background: white;
-        border-radius: 16px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        background: white !important;
+        border-radius: 16px !important;
+        padding: 1.5rem !important;
+        margin-bottom: 1rem !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
     }
     .whatsapp-float {
         position: fixed;
@@ -57,14 +57,14 @@ st.markdown("""
 # -----------------------
 col1, col2 = st.columns([1, 3])
 with col1:
-    st.image("logo.png", width=120)  # place your Faco Limited logo file in same folder
+    st.image("logo.png", width=120)  # Ensure your logo.png is in the project folder
 with col2:
     st.markdown("<h1>Faco Limited</h1><h3>Office Stationery & Student Supplies</h3>", unsafe_allow_html=True)
 
 st.markdown("---")
 
 # -----------------------
-# PRODUCT SHOWCASE
+# PRODUCTS
 # -----------------------
 st.subheader("Our Products")
 cols = st.columns(3)
@@ -89,7 +89,7 @@ for i, p in enumerate(products):
         """, unsafe_allow_html=True)
 
 # -----------------------
-# CONTACT INFO
+# CONTACT SECTION
 # -----------------------
 st.subheader("📞 Contact Us")
 
@@ -119,7 +119,7 @@ with c2:
     st.markdown('</div>', unsafe_allow_html=True)
 
 # -----------------------
-# WHATSAPP FLOAT BUTTON
+# WHATSAPP FLOAT
 # -----------------------
 prefilled_msg = f"Hello {CONTACT['business']}, I’d like to place an order."
 wa_link = CONTACT["wa_catalog_url"] or f"https://wa.me/{CONTACT['whatsapp_e164']}?text={prefilled_msg.replace(' ', '%20')}"
