@@ -29,15 +29,42 @@ st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-    body {font-family: 'Roboto', sans-serif !important;}
-    h1, h2, h3 {font-weight: 600 !important; color: #3D79A4 !important;}
-    .material-card {
-        background: white !important;
-        border-radius: 16px !important;
-        padding: 1.5rem !important;
-        margin-bottom: 1rem !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    body {
+        font-family: 'Roboto', sans-serif !important;
+        background: #F0F4F8;
     }
+
+    h1, h2, h3 {
+        font-weight: 600 !important;
+        color: #0D3B66 !important;
+    }
+
+    /* Abstract Header */
+    .abstract-header {
+        background: linear-gradient(135deg, #0D3B66, #144E82, #1C658C);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 0 0 40px 40px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    /* Cards */
+    .material-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: all .3s ease-in-out;
+    }
+    .material-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    /* WhatsApp Floating Button */
     .whatsapp-float {
         position: fixed;
         width: 60px; height: 60px;
@@ -57,13 +84,13 @@ st.markdown("""
 # -----------------------
 # HEADER
 # -----------------------
-col1, col2 = st.columns([1, 3])
-with col1:
-    st.image("logo.png", width=120)
-with col2:
-    st.markdown("<h1>Faco Limited</h1><h3>Office Stationery & Student Supplies</h3>", unsafe_allow_html=True)
-
-st.markdown("---")
+st.markdown(f"""
+    <div class="abstract-header">
+        <img src="logo.png" width="100" style="margin-bottom:1rem;">
+        <h1>{CONTACT['business']}</h1>
+        <h3>Office Stationery & Student Supplies</h3>
+    </div>
+""", unsafe_allow_html=True)
 
 # -----------------------
 # PRODUCTS
