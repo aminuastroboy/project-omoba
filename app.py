@@ -19,7 +19,7 @@ CONTACT = {
     "lat": 12.0000,
     "lon": 8.5000,
     "hours": {"Mon–Fri": "8:30–18:00", "Sat": "9:00–16:00", "Sun": "Closed"},
-    "wa_catalog_url": "",  # Add WhatsApp catalog link if available
+    "wa_catalog_url": "",
 }
 
 # -----------------------
@@ -27,6 +27,8 @@ CONTACT = {
 # -----------------------
 st.markdown("""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
     body {font-family: 'Roboto', sans-serif !important;}
     h1, h2, h3 {font-weight: 600 !important; color: #3D79A4 !important;}
     .material-card {
@@ -57,7 +59,7 @@ st.markdown("""
 # -----------------------
 col1, col2 = st.columns([1, 3])
 with col1:
-    st.image("logo.png", width=120)  # Ensure your logo.png is in the project folder
+    st.image("logo.png", width=120)
 with col2:
     st.markdown("<h1>Faco Limited</h1><h3>Office Stationery & Student Supplies</h3>", unsafe_allow_html=True)
 
