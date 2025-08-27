@@ -3,7 +3,7 @@ import folium
 from streamlit_folium import st_folium
 
 # -----------------------
-# PAGE CONFIG
+# PAGE CONFIG ABS
 # -----------------------
 st.set_page_config(page_title="Faco Limited", page_icon="🖋️", layout="wide")
 
@@ -31,7 +31,30 @@ st.markdown("""
 
     body {
         font-family: 'Roboto', sans-serif !important;
-        background: #F0F4F8;
+        background: linear-gradient(120deg, #0D3B66 0%, #06BCC1 50%, #FAF0CA 100%) !important;
+        background-attachment: fixed;
+        position: relative;
+    }
+
+    /* Abstract gradient blobs */
+    body::before, body::after {
+        content: "";
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        filter: blur(180px);
+        z-index: -1;
+    }
+    body::before {
+        background: rgba(244, 211, 94, 0.25);  /* golden soft blob */
+        top: -200px;
+        left: -150px;
+    }
+    body::after {
+        background: rgba(13, 59, 102, 0.35);  /* deep blue blob */
+        bottom: -250px;
+        right: -200px;
     }
 
     h1, h2, h3 {
@@ -48,6 +71,15 @@ st.markdown("""
         box-shadow: 0 6px 20px rgba(0,0,0,0.2);
         margin-bottom: 2rem;
         text-align: center;
+    }
+
+    /* Section divider */
+    .section-divider {
+        width: 100%;
+        height: 80px;
+        background: linear-gradient(135deg, #0D3B66, #144E82);
+        border-radius: 0 0 50% 50% / 20%;
+        margin: 2rem 0;
     }
 
     /* Cards */
@@ -95,6 +127,7 @@ st.markdown(f"""
 # -----------------------
 # PRODUCTS
 # -----------------------
+st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 st.subheader("Our Products")
 cols = st.columns(3)
 
@@ -120,6 +153,7 @@ for i, p in enumerate(products):
 # -----------------------
 # CONTACT SECTION
 # -----------------------
+st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 st.subheader("📞 Contact Us")
 
 c1, c2 = st.columns(2)
